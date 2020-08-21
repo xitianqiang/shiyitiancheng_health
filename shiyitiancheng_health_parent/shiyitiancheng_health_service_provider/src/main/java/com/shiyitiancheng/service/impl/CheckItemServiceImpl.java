@@ -1,8 +1,8 @@
 package com.shiyitiancheng.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.shiyitiancheng.dao.CheckItemDao;
 import com.shiyitiancheng.entity.PageResult;
 import com.shiyitiancheng.entity.QueryPageBean;
@@ -33,13 +33,15 @@ public class CheckItemServiceImpl implements CheckItemService {
         Integer currentPage = queryPageBean.getCurrentPage();
         Integer pageSize = queryPageBean.getPageSize();
         String queryString = queryPageBean.getQueryString();//查询条件
+        if (currentPage!=1&&queryString!=null){
+            currentPage=1;
+        }
+        PageHelper.startPage(currentPage, pageSize);
+        List<CheckItem> page = checkItemDao.selectByCondition(queryString);
+        PageInfo<CheckItem> checkItemPageInfo = new PageInfo<>(page);
 
-        PageHelper.startPage(currentPage,pageSize);
-        Page<CheckItem> page = checkItemDao.selectByCondition(queryString);
-        long total = page.getTotal();
-        List<CheckItem> rows = page.getResult();
-
-
+        long total = checkItemPageInfo.getTotal();
+        List<CheckItem> rows = checkItemPageInfo.getList();
         return new PageResult(total,rows);
     }
 
@@ -47,12 +49,17 @@ public class CheckItemServiceImpl implements CheckItemService {
     @Override
     public void deleteById(Integer id) {
         //判断当前检查项是否已经关联到检查组
-        long count = checkItemDao.findCountByCheckItemId(id);
-        if (count>0){
-            // 当前检查项已经被关联到检查级，不允许删除
+//        long count = checkItemDao.findCountByCheckItemId(id);
+//        if (count>0){
+//            // 当前检查项已经被关联到检查级，不允许删除
+//            new RuntimeException();
+//        }
+        try {
+            checkItemDao.deleteById(id);
+        }catch (Exception e){
+            e.printStackTrace();
             new RuntimeException();
         }
-        checkItemDao.deleteById(id);
     }
 
     @Override

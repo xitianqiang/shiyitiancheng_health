@@ -299,6 +299,7 @@
                 // 弹出添加窗口
                 handleCreate() {
                     this.resetForm();
+
                     this.dialogFormVisible = true;
 
                 },
@@ -319,6 +320,7 @@
                 handleCurrentChange(currentPage) {
                     //设置最新的页码
                     this.pagination.currentPage = currentPage;
+                    this.pagination.queryString = null;
                     //重新调用findPage方法进行分页查询
                     this.findPage();
                 },
