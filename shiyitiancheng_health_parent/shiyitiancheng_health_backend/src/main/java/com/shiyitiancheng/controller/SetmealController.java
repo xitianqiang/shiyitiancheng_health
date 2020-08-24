@@ -2,6 +2,7 @@ package com.shiyitiancheng.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.shiyitiancheng.constant.MessageConstant;
+import com.shiyitiancheng.constant.RedisConstant;
 import com.shiyitiancheng.entity.PageResult;
 import com.shiyitiancheng.entity.QueryPageBean;
 import com.shiyitiancheng.entity.Result;
@@ -9,11 +10,13 @@ import com.shiyitiancheng.pojo.Setmeal;
 import com.shiyitiancheng.service.CheckGroupService;
 import com.shiyitiancheng.service.SetmealService;
 import com.shiyitiancheng.utils.QiniuUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -32,6 +35,9 @@ public class SetmealController {
     @Reference
     private SetmealService setmealService;
 
+    //使用JediPool操作Redis服务
+    @Autowired
+    private JedisPool jedisPool;
 
     //新增检查组
     @RequestMapping("/add")
@@ -103,7 +109,9 @@ public class SetmealController {
     public Result upload(@RequestParam("imgFile") MultipartFile imgFile){
 
         String originalFilename = imgFile.getOriginalFilename();//原始文件名
+
         int i = originalFilename.lastIndexOf(".");
+
         String extention = originalFilename.substring(i - 1);//截取后缀名
 
         String fileName = UUID.randomUUID().toString()+extention;//新文件名
@@ -111,10 +119,15 @@ public class SetmealController {
         try {
             //将文件上传到七牛网
             QiniuUtils.upload2Qiniu(imgFile.getBytes(),fileName);
+
+            jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_RESOURCES,fileName);
+
+            return new Result(true,MessageConstant.PIC_UPLOAD_SUCCESS,fileName);
+
         } catch (IOException e) {
             e.printStackTrace();
             return new Result(true,MessageConstant.PIC_UPLOAD_FAIL);
         }
-        return new Result(true,MessageConstant.PIC_UPLOAD_SUCCESS,fileName);
+
     }
 }

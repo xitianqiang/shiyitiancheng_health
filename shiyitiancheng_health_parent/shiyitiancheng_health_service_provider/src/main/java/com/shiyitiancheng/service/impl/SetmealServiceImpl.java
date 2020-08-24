@@ -3,6 +3,7 @@ package com.shiyitiancheng.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.shiyitiancheng.constant.RedisConstant;
 import com.shiyitiancheng.dao.SetmealDao;
 import com.shiyitiancheng.entity.PageResult;
 import com.shiyitiancheng.entity.QueryPageBean;
@@ -10,6 +11,7 @@ import com.shiyitiancheng.pojo.Setmeal;
 import com.shiyitiancheng.service.SetmealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.JedisPool;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,13 +23,23 @@ public class SetmealServiceImpl implements SetmealService {
     @Autowired
     private SetmealDao setmealDao;
 
+    @Autowired
+    private JedisPool jedisPool;
+
     @Override
     @Transactional
     public void addSetmeal(Setmeal setmeal,Integer[] checkgroupIds) {
         setmealDao.addSetmeal(setmeal);
         //设置检查组和检查项的多对多关联关系，操作t_checkgroup_checkitem表
+
+
+
+        String fileName = setmeal.getImg();
+//        jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_DB_RESOURCES,fileName);
+        jedisPool.getResource().srem(RedisConstant.SETMEAL_PIC_RESOURCES,fileName);
         Integer setmealId = setmeal.getId();
         setSetmealAndCheckGroup(setmealId,checkgroupIds);
+
 
     }
 
@@ -84,6 +96,8 @@ public class SetmealServiceImpl implements SetmealService {
     public void updateSetmeal(Setmeal setmeal, Integer[] checkgroupIds) {
         setmealDao.updateSetmeal(setmeal);
         //设置检查组和检查项的多对多关联关系，操作t_checkgroup_checkitem表
+        String fileName = setmeal.getImg();
+        jedisPool.getResource().srem(RedisConstant.SETMEAL_PIC_RESOURCES,fileName);
         Integer setmealId = setmeal.getId();
         setmealDao.delCheckgroupIdsBySetmealId(setmealId);
         setSetmealAndCheckGroup(setmealId,checkgroupIds);

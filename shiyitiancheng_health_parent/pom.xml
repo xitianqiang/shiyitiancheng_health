@@ -12,6 +12,7 @@
         <module>shiyitiancheng_health_interface</module>
         <module>shiyitiancheng_health_service_provider</module>
         <module>shiyitiancheng_health_backend</module>
+        <module>shiyitiancheng_health_jobs</module>
     </modules>
     <packaging>pom</packaging>
     <!-- 集中定义依赖版本号 -->
@@ -168,7 +169,6 @@
                 <artifactId>quartz-jobs</artifactId>
                 <version>${quartz.version}</version>
             </dependency>
-            
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-client</artifactId>
