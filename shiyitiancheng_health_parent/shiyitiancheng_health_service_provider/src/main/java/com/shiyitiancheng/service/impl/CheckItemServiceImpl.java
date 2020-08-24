@@ -24,6 +24,7 @@ public class CheckItemServiceImpl implements CheckItemService {
     private CheckItemDao checkItemDao;
 
     @Override
+    @Transactional
     public void add(CheckItem checkItem) {
         checkItemDao.add(checkItem);
     }
@@ -47,6 +48,7 @@ public class CheckItemServiceImpl implements CheckItemService {
 
     //根据ID删除
     @Override
+    @Transactional
     public void deleteById(Integer id) {
         //判断当前检查项是否已经关联到检查组
 //        long count = checkItemDao.findCountByCheckItemId(id);
@@ -54,12 +56,7 @@ public class CheckItemServiceImpl implements CheckItemService {
 //            // 当前检查项已经被关联到检查级，不允许删除
 //            new RuntimeException();
 //        }
-        try {
-            checkItemDao.deleteById(id);
-        }catch (Exception e){
-            e.printStackTrace();
-            new RuntimeException();
-        }
+        checkItemDao.deleteById(id);
     }
 
     @Override
@@ -68,6 +65,7 @@ public class CheckItemServiceImpl implements CheckItemService {
     }
 
     @Override
+    @Transactional
     public void edit(CheckItem checkItem) {
         checkItemDao.edit(checkItem);
     }

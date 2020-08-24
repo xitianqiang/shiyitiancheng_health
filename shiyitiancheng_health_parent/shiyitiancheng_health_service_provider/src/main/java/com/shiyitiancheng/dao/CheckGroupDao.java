@@ -1,7 +1,6 @@
 package com.shiyitiancheng.dao;
 
 import com.shiyitiancheng.pojo.CheckGroup;
-import com.shiyitiancheng.pojo.CheckItem;
 
 import java.util.List;
 import java.util.Map;
@@ -11,8 +10,6 @@ public interface CheckGroupDao {
 
     void setCheckGroupAndCheckItem(Map map);
 
-    void edit(CheckItem checkItem);
-
     //按条件查询
     List<CheckGroup> findByCondition(String queryString);
     //通过Id查询
@@ -21,4 +18,10 @@ public interface CheckGroupDao {
     List<CheckGroup> findAll();
 
     List<Integer> findCheckItemIdsByCheckGroupId(Integer id);
+
+    void updateCheckGroup(CheckGroup checkGroup);
+
+    void delCheckGroupAndCheckItem(Integer checkGroupId);
+
+    void delCheckGroup(Integer id);
 }

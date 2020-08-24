@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiyitiancheng.dao.SetmealDao">
+    <insert id="addSetmeal">
+        <!--通过mybatis框架提供的selectKey标签获得自增产生的ID值-->
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_setmeal (name,code,helpCode,sex,age,price,remark,attention,img)
+        values (#{name},#{code},#{helpCode},#{sex},#{age},#{price},#{remark},#{attention},#{img})
+    </insert>
+
+    <update id="updateSetmeal">
+        update t_setmeal
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="helpCode != null">
+                helpCode = #{helpCode},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="attention != null">
+                attention = #{attention},
+            </if>
+            <if test="img != null">
+                img = #{img},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="delCheckgroupIdsBySetmealId">
+        delete from t_setmeal_checkgroup where setmeal_id = #{setmealId}
+    </delete>
+    <delete id="delSetmeal">
+        delete from t_setmeal where id = #{setmealId}
+    </delete>
+
+
+    <insert id="setSetmealAndCheckGroup" parameterType="map">
+        insert into t_setmeal_checkgroup (setmeal_id,checkgroup_id)
+        values (#{setmealId},#{checkgroupId})
+    </insert>
+
+    <!--    查询全部-->
+    <select id="findAll" resultType="com.shiyitiancheng.pojo.Setmeal">
+        select * from t_setmeal
+    </select>
+<!--    分页查询，（根据查询内容查询）-->
+    <select id="findByCondition" resultType="com.shiyitiancheng.pojo.Setmeal">
+        select * from t_setmeal
+        <if test="value !=null and value != '' and value.length > 0">
+            where code = #{value} or name = #{value} or helpCode = #{value}
+        </if>
+    </select>
+    <select id="findById" resultType="com.shiyitiancheng.pojo.Setmeal">
+        select * from t_setmeal where id = #{id}
+    </select>
+    <select id="findCheckgroupIdsBySetmealId" resultType="java.lang.Integer">
+        select checkgroup_id from t_setmeal_checkgroup where setmeal_id = #{setmealId}
+    </select>
+</mapper>

@@ -14,12 +14,9 @@
         insert into t_checkgroup (code,name,sex,helpCode,remark,attention)
         values (#{code},#{name},#{sex},#{helpCode},#{remark},#{attention})
     </insert>
-    <insert id="setCheckGroupAndCheckItem" parameterType="map">
-        insert into t_checkgroup_checkitem (checkgroup_id,checkitem_id)
-        values (#{checkgroupId},#{checkitemId})
-    </insert>
-    <update id="edit">
-        update t_checkitem
+
+    <update id="updateCheckGroup">
+        update t_checkgroup
         <set>
             <if test="code != null">
                 code = #{code},
@@ -43,6 +40,11 @@
         </set>
         where id = #{id}
     </update>
+
+    <delete id="delCheckGroup">
+        delete from t_checkgroup where id=#{id}
+    </delete>
+
     <!--    根据条件进行查询-->
     <select id="findByCondition" resultType="com.shiyitiancheng.pojo.CheckGroup">
         select * from t_checkgroup
@@ -50,12 +52,28 @@
             where code = #{value} or name = #{value} or helpCode = #{value}
         </if>
     </select>
+
     <select id="findById" resultType="com.shiyitiancheng.pojo.CheckGroup">
          select * from t_checkgroup where id=#{id}
     </select>
+
     <select id="findAll" resultType="com.shiyitiancheng.pojo.CheckGroup">
          select * from t_checkgroup
     </select>
+
+    <insert id="setCheckGroupAndCheckItem" parameterType="map">
+        insert into t_checkgroup_checkitem (checkgroup_id,checkitem_id)
+        values (#{checkgroupId},#{checkitemId})
+    </insert>
+
+
+
+<!--    清理关联关系     -->
+    <delete id="delCheckGroupAndCheckItem">
+        delete from t_checkgroup_checkitem where checkgroup_id = #{id}
+    </delete>
+
+
     <select id="findCheckItemIdsByCheckGroupId" resultType="java.lang.Integer">
         select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{id}
     </select>

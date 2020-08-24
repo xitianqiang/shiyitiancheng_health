@@ -45,30 +45,72 @@ public class CheckGroupController {
         return pageResult;
     }
 
-    //通过Id查询检查项
+    //查询所有
+    @RequestMapping("/findAll")
+    public Result findAll(){
+
+        try {
+            List<CheckGroup> checkGroups = checkGroupService.findAll();
+            return new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS,checkGroups);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(false, MessageConstant.QUERY_CHECKGROUP_FAIL);
+
+        }
+    }
+
+    //通过Id查询检查组
     @RequestMapping("/findById")
     public Result findCheckGroupById(Integer id){
         try {
             CheckGroup checkGroup = checkGroupService.findById(id);
-            return new Result(true, MessageConstant.QUERY_CHECKGROUP_FAIL,checkGroup);
+            return new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS,checkGroup);
 
         }catch (Exception e){
             e.printStackTrace();
-            return new Result(false, MessageConstant.QUERY_CHECKGROUP_SUCCESS);
+            return new Result(false, MessageConstant.QUERY_CHECKGROUP_FAIL);
 
         }
     }
-    //通过Id查询
+    //通过Id查询检查项
     @RequestMapping("/findCheckItemIdsByCheckGroupId")
     public Result findCheckItemIdsByCheckGroupId(Integer id){
         try {
             List<Integer> checkItemIdsByCheckGroupId = checkGroupService.findCheckItemIdsByCheckGroupId(id);
-            return new Result(true, MessageConstant.QUERY_CHECKITEM_FAIL,checkItemIdsByCheckGroupId);
+            return new Result(true, MessageConstant.QUERY_CHECKITEM_SUCCESS,checkItemIdsByCheckGroupId);
 
         }catch (Exception e){
             e.printStackTrace();
             return new Result(false, MessageConstant.QUERY_CHECKITEM_FAIL);
 
         }
+    }
+
+
+    //新增检查组
+    @RequestMapping("/update")
+    public Result updateCheckGroup(@RequestBody CheckGroup checkGroup,Integer[] checkitemIds){
+        try{
+            checkGroupService.updateCheckGroup(checkGroup, checkitemIds);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(false, MessageConstant.EDIT_CHECKGROUP_FAIL);
+        }
+        return new Result(true,MessageConstant.EDIT_CHECKGROUP_SUCCESS);
+    }
+
+    //删除检查项
+    @RequestMapping("/delete")
+    public Result delete(Integer id){
+
+        try{
+            checkGroupService.deleteById(id);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new Result(false, MessageConstant.DELETE_CHECKGROUP_FAIL);
+        }
+        return new Result(true, MessageConstant.DELETE_CHECKGROUP_SUCCESS);
+
     }
 }
