@@ -15,6 +15,8 @@ public interface CheckGroupDao {
     //通过Id查询
     CheckGroup findById(Integer id);
 
+    List<CheckGroup> findCheckGroupById(Integer id);
+
     List<CheckGroup> findAll();
 
     List<Integer> findCheckItemIdsByCheckGroupId(Integer id);

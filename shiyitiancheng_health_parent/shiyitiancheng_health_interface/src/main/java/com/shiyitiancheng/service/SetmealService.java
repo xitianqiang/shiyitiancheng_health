@@ -11,7 +11,6 @@ public interface SetmealService {
 
     List<Setmeal> findAll();
 
-
     PageResult pageQuery(QueryPageBean queryPageBean);
 
     Setmeal findById(Integer id);
