@@ -35,6 +35,6 @@
     </bean>
 
     <!--加载属性文件，后期在java代码中会使用到属性文件中定义的key和value-->
-    <context:property-placeholder location="classpath:freemarker.properties"/>
+<!--    <context:property-placeholder location="classpath:freemarker.properties"/>-->
 
 </beans>

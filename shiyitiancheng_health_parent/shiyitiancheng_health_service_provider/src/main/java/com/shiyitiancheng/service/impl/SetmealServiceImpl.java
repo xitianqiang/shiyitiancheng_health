@@ -38,8 +38,8 @@ public class SetmealServiceImpl implements SetmealService {
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
 //    从属性文件中读取要生成的html对应的目录
-    @Value("D:/developProject/shiyitiancheng_health/shiyitiancheng_health_parent/shiyitiancheng_health_mobile/src/main/webapp/pages")
-//    @Value("${path}")
+//    @Value("D:/developProject/shiyitiancheng_health/shiyitiancheng_health_parent/shiyitiancheng_health_mobile/src/main/webapp/pages")
+    @Value("${path}")
     private String outPutPath;
 
 //    新增套餐，同时关联检查组
@@ -153,7 +153,7 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public Setmeal findById(Integer id) {
         Setmeal setmeal = setmealDao.findById(id);
-        System.out.println(setmeal);
+
         List<Integer> checkgroupIds = setmealDao.findCheckgroupIdsBySetmealId(setmeal.getId());
         setmeal.setCheckGroupIds(checkgroupIds);
         return setmeal;
@@ -174,6 +174,10 @@ public class SetmealServiceImpl implements SetmealService {
         Integer setmealId = setmeal.getId();
         setmealDao.delCheckgroupIdsBySetmealId(setmealId);
         setSetmealAndCheckGroup(setmealId,checkgroupIds);
+
+
+//         当編輯套餐后需要重新生成静态页面（套餐列表页面，套餐详情页面）
+        generateMobileStaticHtml();
     }
 
     @Override

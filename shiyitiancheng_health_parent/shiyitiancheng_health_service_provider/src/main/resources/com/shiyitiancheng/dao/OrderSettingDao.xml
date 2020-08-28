@@ -13,6 +13,13 @@
         set number = #{number}
         where orderDate = #{orderDate}
     </update>
+
+<!--    根据预约日期更新已预约的人数-->
+    <update id="editReservationsByOrderDate">
+        update t_ordersetting
+        set reservations = #{reservations}
+        where orderDate = #{orderDate}
+    </update>
     <select id="findConutByOrderDate" resultType="com.shiyitiancheng.pojo.OrderSetting">
         select * from t_ordersetting  where orderDate = #{orderDate}
     </select>
@@ -21,5 +28,8 @@
 <!--    根据日期范围查询-->
     <select id="getOrderSettingByMonth" resultType="map">
          select day(orderDate) date,number,reservations from t_ordersetting where orderDate between #{begin} and #{end}
+    </select>
+    <select id="findByOrderDate" resultType="com.shiyitiancheng.pojo.OrderSetting">
+        select * from t_ordersetting where orderDate = #{orderDate}
     </select>
 </mapper>

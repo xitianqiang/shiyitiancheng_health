@@ -92,7 +92,7 @@
 
 <!--    清理关联关系     -->
     <delete id="delCheckGroupAndCheckItem">
-        delete from t_checkgroup_checkitem where checkgroup_id = #{id}
+        delete from t_checkgroup_checkitem where checkgroup_id = #{checkGroupId}
     </delete>
 
 

@@ -68,6 +68,7 @@
             mounted(){
                 axios.post("/order/findById.do?id=" + id).then((response) => {
                     this.orderInfo = response.data.data;
+
                 });
             }
         });
