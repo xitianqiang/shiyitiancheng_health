@@ -228,6 +228,7 @@
                 this.findPage();//VUE对象初始化完成后调用分布查询方法，完成分页查询
             },
             methods: {
+
                 //编辑
                 handleEdit() {
                     this.$refs["dataEditForm"].validate((valid)=>{
@@ -324,6 +325,16 @@
                     //重新调用findPage方法进行分页查询
                     this.findPage();
                 },
+                showMessage(resp){
+                    if (resp=="Error: Request failed with status code 403"){
+                        //权限不足
+                        this.$message.error("无访问权限");
+                        return;
+                    }else{
+                        this.$message.error("未知错误");
+                        return;
+                    }
+                },
                 // 删除
                 handleDelete(row) {
                     this.$confirm('此操作将永久删除数据，是否继续？',"提示",{
@@ -342,6 +353,8 @@
                             }else{
                                 this.$message.error(resp.data.message);
                             }
+                        }).catch((resp)=>{
+                            this.showMessage(resp);
                         })
                     }).catch(()=>{
                         //用户点击了取消
