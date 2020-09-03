@@ -9,10 +9,12 @@ import com.shiyitiancheng.pojo.Role;
 import com.shiyitiancheng.pojo.User;
 import com.shiyitiancheng.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
 @Service(interfaceClass = UserService.class)
+@Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;

@@ -31,4 +31,8 @@ public interface SetmealDao {
 
     //删除套餐
     void delSetmeal(Integer id);
+
+    List<String> findSetmealNames();
+
+    List<Map<String, Object>> findSetmealCount();
 }

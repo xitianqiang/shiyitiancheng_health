@@ -105,4 +105,14 @@
     <select id="findCheckgroupIdsBySetmealId" resultType="java.lang.Integer">
         select checkgroup_id from t_setmeal_checkgroup where setmeal_id = #{id}
     </select>
+    <select id="findSetmealNames" resultType="java.lang.String">
+        select name from t_setmeal
+    </select>
+    <select id="findSetmealCount" resultType="java.util.Map">
+        select s.name name,count(o.id) `value`
+        from t_setmeal s,t_order o
+        where s.id = o.setmeal_id
+        group by s.name
+
+    </select>
 </mapper>

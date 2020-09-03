@@ -5,10 +5,12 @@ import com.shiyitiancheng.dao.OrderSettingDao;
 import com.shiyitiancheng.pojo.OrderSetting;
 import com.shiyitiancheng.service.OrderSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service(interfaceClass = OrderSettingService.class)
+@Transactional
 public class OrderSettingServiceImpl implements OrderSettingService {
     @Autowired
     private OrderSettingDao orderSettingDao;

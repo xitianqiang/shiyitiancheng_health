@@ -186,4 +186,16 @@ public class SetmealServiceImpl implements SetmealService {
         setmealDao.delCheckgroupIdsBySetmealId(id);
         setmealDao.delSetmeal(id);
     }
+
+    @Override
+    public List<String> findSetmealNames() {
+
+        return setmealDao.findSetmealNames();
+    }
+
+    @Override
+    public List<Map<String, Object>> findSetmealCount() {
+
+        return setmealDao.findSetmealCount();
+    }
 }
